@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Grid, Button, makeStyles , TextField } from "@material-ui/core";
-//import SaveIcon from '@mui/icons-material/Save';
-//import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ToDoService from "../../service/toDo"
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -13,25 +12,70 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-export default function AddForm(){
+export default function AddForm(props){
     const classes = useStyles();
 
-    const [name, setName] = useState('')
+    const [title, setTitle] = useState('')
     const [desc, setDesc] = useState('')
     const [fina, setFina] = useState('')
 
-    const handleChangeName   = e => setName(e.target.value)
+    const [flag, setFlag] = useState(props.edit)
+    const [editedFlag, setEditedFlag] = useState(false)
+
+    const handleChangeTitle   = e => setTitle(e.target.value)
     const handleChangeDesc   = e => setDesc(e.target.value)
 
+    let idTask = Number((localStorage.getItem("idTask")))
+
+    if (flag=="true"){
+        (async function getTask(){
+            const resp = await ToDoService.getTaskById(idTask)
+
+            setTitle(resp["title"])
+            setDesc(resp["desc"])
+
+            setFlag("false")
+            setEditedFlag(true)
+        })()
+    }
+
+    const handleSubmit = e =>{
+        e.preventDefault()
+        (async function getAdmById(){
+            let temp ={
+                title: title,
+                desc: desc,
+                fina: false
+            }
+            
+            try{
+                if(!editedFlag)
+                    await ToDoService.createNewTask(temp)
+                
+                else
+                    await ToDoService.updateTask(idTask, temp)
+
+                setEditedFlag(false)                
+                alert("Salvo")
+                window.location.href = '/'
+                
+            }
+            catch(error){
+                console.log("ERROR", error)
+                alert("Erro de salvamento")
+            }
+        })()
+    }
+
     return(
-        <form className = {classes.root} noValidate>
+        <form className = {classes.root} noValidate onSubmit={handleSubmit}>
             <Grid container direction="column" alignItems="center">
                 <Grid item xs={6}>
                     <TextField
-                    value = {name}
-                    onChange={handleChangeName}
-                    label = "Nome"
-                    name = "nome"
+                    value = {title}
+                    onChange={handleChangeTitle}
+                    label = "Título"
+                    name = "title"
                     variant = "outlined"
                     style = {{width: 1000}}
                     />
@@ -41,7 +85,7 @@ export default function AddForm(){
                     value = {desc}
                     onChange={handleChangeDesc}
                     label = "Descrição"
-                    name = "descricao"
+                    name = "desc"
                     variant = "outlined"
                     multiline
                     rows={5}
@@ -53,15 +97,13 @@ export default function AddForm(){
                 <Grid item xs={12}>
                     <Button
                     size = "large"
-                    //startIcon = {<SaveIcon />}
                     color = "secondary"
                     type = "submit"
                     >SALVAR</Button>
                     
                     <Button
                     size = "large"
-                    //startIcon = {<ArrowBackIcon />}
-                    href="/dash" 
+                    href="/" 
                     variant="contained"
                     >VOLTAR</Button>
                 </Grid>
