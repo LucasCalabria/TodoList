@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { ListGroup, ListGroupItem} from 'reactstrap'
 import { Button } from "@material-ui/core"
+import Checkbox from '@mui/material/Checkbox'
 import ToDoService from "../../service/toDo"
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel'
 
 export default function DashList(){
     let idTask = 0
@@ -30,22 +33,48 @@ export default function DashList(){
     }
 
     return(
-        <ListGroup>
-            <ListGroupItem>
-                {tasks.map((task)=>{
-                    return (
-                        <React.Fragment>
-                            <strong>{task.title}</strong>
-                            <Button 
-                                onClick={function(event){{idTask=task.id}; handleEdit()}}
-                            >Editar</Button>
-                            <Button 
-                                onClick={function(event){{idTask=task.id}; handleDelete()}}
-                            >Apagar</Button>
-                        </React.Fragment>
-                    )
-                })}
-            </ListGroupItem>
-        </ListGroup>
+        <FormGroup>
+            {tasks.map((task)=>{
+                return (
+                    <React.Fragment>
+                        <div class="container">
+                        <FormControlLabel 
+                            control={<Checkbox 
+                                defaultChecked={task.fina}
+                                onChange={function(event){
+                                    {task.fina=event.target.checked} 
+                                    {ToDoService.updateTask(task.id, task)}
+                                    //{window.location.reload()}
+                                }}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                            />} 
+                            label="" 
+                        />
+                            
+                        <strong>{task.title}</strong>
+
+                        <Button 
+                            size="small"
+                            color="primary"
+                            onClick={function(event){
+                                {idTask=task.id} 
+                                {if (!task.fina) handleEdit()
+                                 else alert("Não é possível alterar uma tarefa finalizada")
+                                }
+                            }}
+                        >Editar</Button>
+                        <Button
+                            size="small"
+                            color="secondary"
+                            onClick={function(event){
+                                {idTask=task.id} 
+                                handleDelete()
+                            }}
+                        >Apagar</Button>
+                        </div>
+                    </React.Fragment>
+                )
+            })}
+        </FormGroup>
     )
 }

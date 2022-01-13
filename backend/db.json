@@ -4,13 +4,8 @@
       "title": "Exemplo",
       "desc": "sasdsad",
       "final": false,
-      "id": 0
-    },
-    {
-      "title": "asd",
-      "desc": "faa",
-      "fina": false,
-      "id": 2
+      "id": 0,
+      "fina": true
     },
     {
       "title": "qete121",
