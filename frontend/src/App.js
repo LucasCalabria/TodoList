@@ -1,4 +1,4 @@
-import { AddPage, EditPage }from "./pages";
+import { AddPage, EditPage, DashPage }from "./pages";
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 
 function App() {
@@ -6,6 +6,7 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <Routes>
+          <Route exact path = "/" element={<DashPage />} />
           <Route exact path = "/add" element={<AddPage />} />
           <Route exact path = "/edit" element={<EditPage />} />
         </Routes>

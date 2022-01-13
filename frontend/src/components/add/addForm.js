@@ -22,8 +22,8 @@ export default function AddForm(props){
     const [flag, setFlag] = useState(props.edit)
     const [editedFlag, setEditedFlag] = useState(false)
 
-    const handleChangeTitle   = e => setTitle(e.target.value)
-    const handleChangeDesc   = e => setDesc(e.target.value)
+    const handleChangeTitle = e => setTitle(e.target.value)
+    const handleChangeDesc  = e => setDesc(e.target.value)
 
     let idTask = Number((localStorage.getItem("idTask")))
 
@@ -41,7 +41,7 @@ export default function AddForm(props){
 
     const handleSubmit = e =>{
         e.preventDefault()
-        (async function getAdmById(){
+        (async function getTaskById(){
             let temp ={
                 title: title,
                 desc: desc,
