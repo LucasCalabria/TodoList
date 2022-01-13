@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ListGroup, ListGroupItem} from 'reactstrap'
 import { Button } from "@material-ui/core";
 import ToDoService from "../../service/toDo"
 
 export default function DashList(){
-    const idTask = 0
+    let idTask = 0
+    let tasks = [
+        {id: 0, title: "tarefa vvc", desc: "sadasd"},
+        {id: 1, title: "tarefa asd", desc: "syjuyj"}
+    ]
+
+    useEffect(() => {
+        (async function getAllTasks(){
+            tasks = await ToDoService.getAllTasks()
+        })()
+    },[])
 
     const handleDelete = () =>{
         (async function removeTask(){
@@ -20,13 +30,19 @@ export default function DashList(){
     return(
         <ListGroup>
             <ListGroupItem>
-                <strong>Tarefa 1</strong>
-                    <Button 
-                        onClick = {handleDelete}
-                    >Editar</Button>
-                    <Button 
-                        //onClick = {handleEdit}
-                    >Apagar</Button>
+                {tasks.map((task)=>{
+                    return (
+                        <React.Fragment>
+                            <strong>{task.title}</strong>
+                            <Button 
+                                //onClick = {handleDelete}
+                            >Editar</Button>
+                            <Button 
+                                //onClick = {handleEdit}
+                            >Apagar</Button>
+                        </React.Fragment>
+                    )
+                })}
             </ListGroupItem>
         </ListGroup>
     )
