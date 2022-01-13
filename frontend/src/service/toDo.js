@@ -17,7 +17,7 @@ const ToDoService = {
     },
 
     updateTask: async (id, task) => {
-        const { data } = await Api.post(`/tasks/${id}`, task)
+        const { data } = await Api.put(`/tasks/${id}`, task)
         return data
     },
 

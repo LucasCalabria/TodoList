@@ -1,18 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ListGroup, ListGroupItem} from 'reactstrap'
-import { Button } from "@material-ui/core";
+import { Button } from "@material-ui/core"
 import ToDoService from "../../service/toDo"
 
 export default function DashList(){
     let idTask = 0
-    let tasks = [
-        {id: 0, title: "tarefa vvc", desc: "sadasd"},
-        {id: 1, title: "tarefa asd", desc: "syjuyj"}
-    ]
+    const [tasks, setTasks] = useState([])
 
     useEffect(() => {
         (async function getAllTasks(){
-            tasks = await ToDoService.getAllTasks()
+            setTasks (await ToDoService.getAllTasks())
         })()
     },[])
 
@@ -20,11 +17,16 @@ export default function DashList(){
         (async function removeTask(){
             const data = await ToDoService.deleteTask(idTask)
             if (data){
-                alert("Restaurante removido com sucesso")
+                alert("Tarefa removida com sucesso")
                 window.location.reload()
             }
             else alert("Erro de remoção")
         })()
+    }
+
+    const handleEdit = () =>{
+        localStorage.setItem("idTask", idTask)
+        window.location.href = "http://localhost:3000/edit"
     }
 
     return(
@@ -35,10 +37,10 @@ export default function DashList(){
                         <React.Fragment>
                             <strong>{task.title}</strong>
                             <Button 
-                                //onClick = {handleDelete}
+                                onClick={function(event){{idTask=task.id}; handleEdit()}}
                             >Editar</Button>
                             <Button 
-                                //onClick = {handleEdit}
+                                onClick={function(event){{idTask=task.id}; handleDelete()}}
                             >Apagar</Button>
                         </React.Fragment>
                     )
