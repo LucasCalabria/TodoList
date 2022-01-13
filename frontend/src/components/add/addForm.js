@@ -39,32 +39,49 @@ export default function AddForm(props){
         })()
     }
 
+    const validateForm = () =>{
+        let valid = true
+        let temp = {
+            title: title,
+            desc: desc
+        }
+        if (!temp.title || !temp.desc)
+            valid = false        
+
+        return valid
+    }
+
     const handleSubmit = e =>{
         e.preventDefault()
-        (async function getTaskById(){
-            let temp ={
-                title: title,
-                desc: desc,
-                fina: false
-            }
-            
-            try{
-                if(!editedFlag)
-                    await ToDoService.createNewTask(temp)
-                
-                else
-                    await ToDoService.updateTask(idTask, temp)
+        if(validateForm()){
+            (async function createNewTask(){
+                let temp ={
+                    title: title,
+                    desc: desc,
+                    fina: false
+                }
 
-                setEditedFlag(false)                
-                alert("Salvo")
-                window.location.href = '/'
-                
-            }
-            catch(error){
-                console.log("ERROR", error)
-                alert("Erro de salvamento")
-            }
-        })()
+                try{
+                    if(!editedFlag)
+                        await ToDoService.createNewTask(temp)
+                    
+                    else
+                        await ToDoService.updateTask(idTask, temp)
+
+                    setEditedFlag(false)        
+                    alert("Salvo")
+                    window.location.href = '/'
+                    
+                }
+                catch(error){
+                    console.log("ERROR", error)
+                    alert("Erro de salvamento")
+                }
+             })()
+        }
+        else{
+            alert("Erro de Preenchimento")
+        }   
     }
 
     return(
