@@ -1,8 +1,8 @@
-Rodar o frontend:
+## **Como rodar o frontend:**
 cd frontend
-npm start
+<br /> npm start
 
-Rodar o backend:
+## **Como rodar o backend:**
 cd backend
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-json-server -p 8000 db.json
+<br /> Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+<br /> json-server -p 8000 db.json
